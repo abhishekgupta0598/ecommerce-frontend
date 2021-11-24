@@ -1,0 +1,87 @@
+.navMargin {
+  color: black;
+}
+.navButton {
+  color: black;
+}
+.message {
+  color: red;
+  padding: -16px;
+}
+
+.productImage {
+  border: 1px solid;
+  display: inline-block;
+  transition: transform 0.5s;
+  width: 300px;
+  height: 220px;
+}
+
+.productImage:hover {
+  -ms-transform: scale(1); /* IE 9 */
+  -webkit-transform: scale(1); /* Safari 3-8 */
+  transform: scale(1.05);
+}
+.root {
+  padding: 1%;
+}
+.span1 {
+  display: inline-block;
+  width: 300px;
+  height: 300px;
+  margin: 4px;
+}
+.span2 {
+  display: inline-block;
+  width: 300px;
+  height: 220px;
+}
+.span3 {
+  display: inline-block;
+  width: 300px;
+  height: 80px;
+}
+.cartItems1 {
+  display: block;
+  width: 800px;
+  float: left;
+  margin-top: 6px;
+}
+.cartItems2 {
+  width: 300px;
+  height: 220px;
+  float: left;
+}
+.cartItems3 {
+  width: 300px;
+  margin-left: 40px;
+  height: 220px;
+  float: left;
+}
+
+.bg {
+  height: 594px;
+  width: 1355px;
+  margin: 0px;
+  /* The image used */
+  background-image: url("../bag01.jpeg");
+
+  /* Center and scale the image nicely */
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.content {
+  position: absolute;
+  bottom: 0;
+  background: rgb(0, 0, 0); /* Fallback color */
+  background: rgba(0, 0, 0, 0.5); /* Black background with 0.5 opacity */
+  color: #f1f1f1;
+  width: 100%;
+  padding: 20px;
+}
+
+.font {
+  font-size: 100px;
+}
