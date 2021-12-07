@@ -4,7 +4,8 @@ import React, { useState, useEffect } from "react";
 import "../styles/stylesheet.css";
 import { useDispatch } from "react-redux";
 import { openForm } from "../redux/loginForm/action";
-import { AuthService } from "../Service/AuthService";
+import ApiService from "../Service/ApiService";
+import AuthService from "../Service/AuthService";
 import Stack from "@mui/material/Stack";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
@@ -50,30 +51,15 @@ function Product() {
   };
 
   useEffect(() => {
-    axios
-      .get("http://localhost:9090/ecommerce/product")
+    ApiService
+      .get("/products/list")
       .then((res) => {
         console.log("res", res);
-        setProduct(
-          res.data.map((res, index) => {
-            return { ...res, index: index, add: add, count: count };
-          })
-        );
+        setProduct(res.data.products);
       })
       .catch((err) => {
         console.log("error", err);
       });
-    if (AuthService.get().token() === true) {
-      axios
-        .post("http://localhost:9090/ecommerce/cart", {
-          totalQty: 0,
-          totalCost: 0,
-          cartId: AuthService.get().getUser().id,
-        })
-        .then((res) => {
-          console.log("createdCart", res);
-        });
-    }
   }, []);
 
   const addHandler = (index) => {
@@ -85,15 +71,10 @@ function Product() {
       dispatch(openForm());
       return;
     }
-    axios
-      .post("http://localhost:9090/ecommerce/items", {
+    ApiService
+      .post("/carts/items/add", {
         productCode: product[index].productCode,
-        price: product[index].price,
-        title: product[index].title,
-        qty: product[index].count,
-        imagePath: product[index].imagePath,
-        available: true,
-        userId: AuthService.get().getUser().id,
+        quantity: product[index].count,
       })
       .then((res) => {
         console.log("result", res);
@@ -117,7 +98,10 @@ function Product() {
     console.log("index", index);
     const productCode = product[index].productCode;
     axios
-      .delete(`http://localhost:9090/ecommerce/items/${productCode}`)
+      .post(`/carts/items/remove`, {
+        productCode,
+        quantity: product[index].count,
+      })
       .then((res) => {
         console.log("res", res);
         product[index].add--;

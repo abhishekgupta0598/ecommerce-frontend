@@ -12,7 +12,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { openForm, login } from "../redux/loginForm/action";
 import Badge from "@mui/material/Badge";
 import { styled } from "@mui/material/styles";
-import { AuthService } from "../Service/AuthService";
+import AuthService from "../Service/AuthService";
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
   "& .MuiBadge-badge": {
@@ -70,7 +70,7 @@ export default function NavBar() {
           </Link>
           <Button color="inherit" onClick={accountHandler}>
             <AccountCircleIcon className="navMargin" />
-            {AuthService.get().getUser()
+            {AuthService.get().isAuthenticated()
               ? AuthService.get().getUser().username
               : ""}
           </Button>

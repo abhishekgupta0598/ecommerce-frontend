@@ -8,7 +8,8 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Slide from "@mui/material/Slide";
 import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
-import { AuthService } from "../Service/AuthService";
+import AuthService from "../Service/AuthService";
+import ApiService from "../Service/ApiService";
 import Stack from "@mui/material/Stack";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
@@ -35,17 +36,13 @@ function CheckOut(props) {
     if (AuthService.get().getUser() === null) {
       console.log("no items yet!");
     } else {
-      axios
-        .get(
-          `http://localhost:9090/ecommerce/cart/${
-            AuthService.get().getUser().id
-          }`
-        )
+      ApiService
+        .get(`/carts`)
         .then((res) => {
-          console.log("res", res.data.cart.cart.userId);
+          console.log("res", res.data.cart);
           setItems(
-            res.data.cart.cart.userId.map((res, index) => {
-              return { ...res, index: index, total: total };
+            res.data.cart.items.map((item, index) => {
+              return { ...item, index: index};
             })
           );
           setOpen(true);
@@ -73,6 +70,13 @@ function CheckOut(props) {
         console.log("error", err);
       });
   };
+
+  let totalQuantity = 0;
+  let totalPrice = 0;
+  for (const item of items) {
+    totalQuantity += item.quantity;
+    totalPrice += item.price;
+  }
 
   return (
     <div>
@@ -102,23 +106,23 @@ function CheckOut(props) {
                       <tr>
                         <td>{res.title}</td>
                         <td>{res.price}</td>
-                        <td>{res.qty}</td>
-                        <td>{res.qty * res.price}</td>
+                        <td>{res.quantity}</td>
+                        <td>{res.quantity * res.price}</td>
                       </tr>
                     );
                   })}
                 </tbody>
               </table>
             </DialogContentText>
-            <h3 style={{ float: "left", marginLeft: "95px" }}>{props.qty}</h3>
+            <h3 style={{ float: "left", marginLeft: "95px" }}>{totalQuantity}</h3>
             <h3 style={{ float: "left", marginLeft: "40px" }}>
-              {props.amount}
+              {totalPrice}
             </h3>
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleClose}>cancle</Button>
+            <Button onClick={handleClose}>cancel</Button>
             <Button
-              disabled={!props.qty || !props.amount}
+              disabled={!totalQuantity || !totalPrice}
               onClick={paymentHandler}
               variant="contained"
               color="inherit"

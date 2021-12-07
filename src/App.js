@@ -10,7 +10,7 @@ import Logout from "./component/logout";
 import { useSelector } from "react-redux";
 import Product from "./component/Product";
 import Cart from "./component/Cart";
-import { AuthService } from "./Service/AuthService";
+import AuthService from "./Service/AuthService";
 
 function App() {
   const login = useSelector((state) => state.form.login);

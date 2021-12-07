@@ -1,5 +1,5 @@
 import React from "react";
-import { AuthService } from "../Service/AuthService";
+import AuthService from "../Service/AuthService";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
@@ -37,7 +37,7 @@ function Logout() {
             </Button>
           </span>
           <Button onClick={handleClose} color="inherit">
-            Cancle
+            Cancel
           </Button>
           <Button onClick={logoutHandler} color="inherit">
             LOGOUT

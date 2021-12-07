@@ -4,8 +4,9 @@ import TextField from "@mui/material/TextField";
 import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import Button from "@mui/material/Button";
-import "../styles/stylesheet.css";
-import { AuthService } from "../Service/AuthService";
+import "../styles/stylesheet.css"
+import ApiService from "../Service/ApiService";
+import AuthService from "../Service/AuthService";
 import { useDispatch } from "react-redux";
 import { closeForm, login } from "../redux/loginForm/action";
 import Stack from "@mui/material/Stack";
@@ -19,10 +20,10 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 export default function Login(props) {
   const [username, setUsername] = useState("jai");
   const [password, setPassword] = useState("jai");
-  const [email, setEmail] = useState("jai@gmail.com");
   const [message, setMessage] = useState("");
   const dispatch = useDispatch();
   const [open, setOpen] = React.useState(false);
+  const [errMsg, setErr] = React.useState('Error occured');
 
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
@@ -33,22 +34,21 @@ export default function Login(props) {
   };
 
   const submitHandler = () => {
-    axios
-      .post("http://localhost:9090/ecommerce/login", {
+    ApiService
+      .post("/auth/login", {
         username: username,
-        email: email,
         password: password,
       })
       .then((res) => {
         console.log("result", res);
         AuthService.get().login(res.data.token, res.data.user);
-        setMessage(res.data.message);
+        setMessage('Logged in successfully!');
         dispatch(closeForm());
         dispatch(login());
-        // window.location.reload();
       })
       .catch((err) => {
         console.log("error", err);
+        setErr(err.response.data.msg);
         setOpen(true);
       });
   };
@@ -63,7 +63,7 @@ export default function Login(props) {
               severity="success"
               sx={{ width: "100%" }}
             >
-              Invalid username or password
+              {errMsg}
             </Alert>
           </Snackbar>
         </Stack>
@@ -80,16 +80,6 @@ export default function Login(props) {
           variant="standard"
           onChange={(e) => setUsername(e.target.value)}
           value={username}
-        />
-        <TextField
-          margin="dense"
-          id="email"
-          label="Email"
-          type="Email"
-          fullWidth
-          variant="standard"
-          onChange={(e) => setEmail(e.target.value)}
-          value={email}
         />
         <TextField
           margin="dense"

@@ -10,6 +10,8 @@ import "../styles/stylesheet.css";
 import Stack from "@mui/material/Stack";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
+import ApiService from "../Service/ApiService";
+import AuthService from "../Service/AuthService";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -21,8 +23,9 @@ export default function SignUp(props) {
   const [email, setEmail] = useState("");
   const [mobile_no, setMobileNumber] = useState("");
   const [message, setMessage] = useState("");
-  const dispatch = useDispatch();
-  const [open, setOpen] = React.useState(false);
+  const dispatch = useDispatch()
+  const [open, setOpen] = React.useState(false);;
+  const [errMsg, setErr] = React.useState('Error Occurred!');
 
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
@@ -32,8 +35,8 @@ export default function SignUp(props) {
   };
 
   const submitHandler = () => {
-    axios
-      .post("http://localhost:9090/ecommerce/signup", {
+    ApiService
+      .post("/auth/register", {
         username: username,
         mobile_no: mobile_no,
         email: email,
@@ -44,13 +47,9 @@ export default function SignUp(props) {
         // dispatch(closeForm());
         setMessage("The user is created successfully!");
       })
-      .catch((error) => {
-        console.log(error);
-        if (username && email && password && mobile_no) {
-          setMessage("This user is already exit");
-        } else {
-          setMessage("Please provide all the information");
-        }
+      .catch((err) => {
+        console.log("error", err);
+        setErr(err.response.data.msg);
         setOpen(true);
       });
   };
@@ -69,7 +68,7 @@ export default function SignUp(props) {
               severity="success"
               sx={{ width: "100%" }}
             >
-              {message}
+              {errMsg}
             </Alert>
           </Snackbar>
         </Stack>

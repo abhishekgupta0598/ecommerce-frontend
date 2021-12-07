@@ -8,10 +8,11 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import CheckOut from "./CheckOut";
 import { useDispatch } from "react-redux";
 import { removeItem } from "../redux/cart/action";
-import { AuthService } from "../Service/AuthService";
+import AuthService from "../Service/AuthService";
 import Stack from "@mui/material/Stack";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
+import ApiService from "../Service/ApiService";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={2} ref={ref} variant="filled" {...props} />;
@@ -35,38 +36,35 @@ function Cart() {
   };
 
   useEffect(() => {
-    if (AuthService.get().getUser() === null) {
+    if (!AuthService.get().isAuthenticated()) {
       console.log("no items yet!");
-    } else {
-      axios
-        .get(
-          `http://localhost:9090/ecommerce/cart/${
-            AuthService.get().getUser().id
-          }`
-        )
-        .then((res) => {
-          console.log("res", res.data.cart.cart.userId);
-          setItems(
-            res.data.cart.cart.userId.map((res, index) => {
-              return { ...res, index: index };
-            })
-          );
-          console.log("items", items);
-        })
-        .catch((err) => {
-          console.log("error", err);
-        });
-    }
+      return;
+    } 
+    ApiService
+      .get('/carts')
+      .then((res) => {
+        console.log("res", res);
+        setItems(
+          res.data.cart.items.map((item, index) => {
+            return {...item, index: index };
+          })
+        );
+        console.log("items", items);
+      })
+      .catch((err) => {
+        console.log("error", err);
+      });
   }, [removedItem]);
 
   const removeItems = (index) => {
     console.log("index", index);
     const productCode = items[index].productCode;
-    axios
-      .delete(
-        `http://localhost:9090/ecommerce/items/${
-          AuthService.get().getUser().id
-        }/${productCode}`
+    ApiService
+      .post(
+        `/carts/items/remove`, {
+          productCode: productCode,
+          quantity: items[index].quantity,
+        }
       )
       .then((res) => {
         console.log("res", res);
@@ -109,14 +107,14 @@ function Cart() {
         </Snackbar>
       </Stack>
       <h3>All Purchase Items</h3>
-      {items.map((items, index) => {
+      {items.map((item, index) => {
         return (
           <div className="cartItems1">
             <span className="cartItems2">
               <img
-                src={`${items.imagePath}`}
+                src={`${item.imagePath}`}
                 alt="items images"
-                key={`${items.productCode}`}
+                key={`${item.productCode}`}
                 className="productImage"
               />
             </span>
@@ -132,19 +130,19 @@ function Cart() {
                   onClick={() => removeItems(index)}
                   color="inherit"
                   variant="contained"
-                  key={`${items.productCode}`}
+                  key={`${item.productCode}`}
                   style={{ marginLeft: "10px", float: "left" }}
                 >
                   <DeleteIcon />
                 </IconButton>
               </div>
               <p style={{ marginTop: "-5px", clear: "left" }}>
-                Product Name: {items.title}
+                Product Name: {item.title}
               </p>
-              <p style={{ marginTop: "-5px" }}>Price: {items.price}</p>
+              <p style={{ marginTop: "-5px" }}>Price: {item.price}</p>
               <p style={{ marginTop: "-5px" }}>Manufacturer: India</p>
               <p style={{ float: "left", marginTop: "-5px" }}>
-                Quantity:{items.qty}
+                Quantity:{item.quantity}
               </p>
             </span>
           </div>

@@ -1,4 +1,4 @@
-export class AuthService {
+export default class AuthService {
   static instance = null;
   authToken = null;
   user = null;
@@ -56,7 +56,7 @@ export class AuthService {
 
   getUser() {
     if (!this.isAuthenticated()) {
-      // throw Error("not authenticated");
+      throw Error("not authenticated");
       // return null;
       console.log("error user");
     }
