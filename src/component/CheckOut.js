@@ -1,4 +1,3 @@
-import axios from "axios";
 import React, { useState, useEffect } from "react";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
@@ -10,13 +9,7 @@ import Slide from "@mui/material/Slide";
 import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
 import AuthService from "../Service/AuthService";
 import ApiService from "../Service/ApiService";
-import Stack from "@mui/material/Stack";
-import Snackbar from "@mui/material/Snackbar";
-import MuiAlert from "@mui/material/Alert";
-
-const Alert = React.forwardRef(function Alert(props, ref) {
-  return <MuiAlert elevation={2} ref={ref} variant="filled" {...props} />;
-});
+import StripeCheckout from "react-stripe-checkout";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -24,9 +17,6 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 function CheckOut(props) {
   const [items, setItems] = useState([]);
-  const [open, setOpen] = React.useState(true);
-  const [total, setTotal] = useState(0);
-  const [openDialog, setDialog] = useState(false);
 
   const handleClose = () => {
     props.close();
@@ -36,16 +26,14 @@ function CheckOut(props) {
     if (AuthService.get().getUser() === null) {
       console.log("no items yet!");
     } else {
-      ApiService
-        .get(`/carts`)
+      ApiService.get(`/carts`)
         .then((res) => {
           console.log("res", res.data.cart);
           setItems(
             res.data.cart.items.map((item, index) => {
-              return { ...item, index: index};
+              return { ...item, index: index };
             })
           );
-          setOpen(true);
           console.log("items", items);
           console.log("props", props);
         })
@@ -56,15 +44,25 @@ function CheckOut(props) {
   }, [props.checkout]);
 
   const paymentHandler = () => {
-    axios
-      .delete(
-        `http://localhost:9090/ecommerce/userItem/${
-          AuthService.get().getUser().id
-        }`
-      )
+    ApiService.get("/carts/items/removeAll")
       .then((res) => {
-        console.log("The payment is done", res);
-        setDialog(true);
+        console.log("response", res);
+        window.location.reload();
+      })
+      .catch((err) => {
+        console.log("error", err);
+      });
+  };
+
+  const makePayment = (token) => {
+    ApiService.post("/checkout/payment", {
+      totalPrice: totalPrice,
+      totalQuantity: totalQuantity,
+      token: token,
+    })
+      .then((res) => {
+        console.log("response", res);
+        paymentHandler();
       })
       .catch((err) => {
         console.log("error", err);
@@ -75,14 +73,14 @@ function CheckOut(props) {
   let totalPrice = 0;
   for (const item of items) {
     totalQuantity += item.quantity;
-    totalPrice += item.price;
+    totalPrice = totalPrice + item.quantity * item.price;
   }
 
   return (
     <div>
       <div>
         <Dialog
-          open={open}
+          open={true}
           TransitionComponent={Transition}
           keepMounted
           onClose={handleClose}
@@ -114,39 +112,31 @@ function CheckOut(props) {
                 </tbody>
               </table>
             </DialogContentText>
-            <h3 style={{ float: "left", marginLeft: "95px" }}>{totalQuantity}</h3>
+            <h3 style={{ float: "left", marginLeft: "95px" }}>
+              {totalQuantity}
+            </h3>
             <h3 style={{ float: "left", marginLeft: "40px" }}>
-              {totalPrice}
+              {totalPrice.toFixed(2)}
             </h3>
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose}>cancel</Button>
             <Button
               disabled={!totalQuantity || !totalPrice}
-              onClick={paymentHandler}
+              // onClick={paymentHandler}
               variant="contained"
               color="inherit"
             >
               <AccountBalanceIcon />
-              payment
+              <StripeCheckout
+                stripeKey="pk_test_51JfQDaSBKItp4gm7CA23ztTLHOl18mHJZwUJ0ysf8QDj8QeAKtpxZyH36n29mrkUltH4FJxfA3MMjb0vrq5FMmSh00X1qHOgO6"
+                token={makePayment}
+              >
+                PAYMENT
+              </StripeCheckout>
             </Button>
           </DialogActions>
         </Dialog>
-        <Stack spacing={2} sx={{ width: "100%" }}>
-          <Snackbar
-            open={openDialog}
-            autoHideDuration={3000}
-            onClose={() => window.location.reload()}
-          >
-            <Alert
-              onClose={() => window.location.reload()}
-              severity="success"
-              sx={{ width: "100%" }}
-            >
-              The payment is done successfully!
-            </Alert>
-          </Snackbar>
-        </Stack>
       </div>
     </div>
   );

@@ -9,12 +9,12 @@ export default function reducer(state = initialState, action) {
     case ADDITEM:
       return {
         ...state,
-        add: state.add + 1,
+        add: state.add + action.items,
       };
     case REMOVEITEM:
       return {
         ...state,
-        add: state.add - 1,
+        add: state.add - action.items,
       };
     default:
       return {

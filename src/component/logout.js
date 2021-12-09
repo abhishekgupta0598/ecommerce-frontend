@@ -33,7 +33,7 @@ function Logout() {
                 ? `${
                     AuthService.get().getUser().username
                   } is LogIn Successfully!`
-                : "LogIn Successfully!"}
+                : null}
             </Button>
           </span>
           <Button onClick={handleClose} color="inherit">

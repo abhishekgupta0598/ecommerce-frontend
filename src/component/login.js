@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import axios from "axios";
+// import axios from "axios";
 import TextField from "@mui/material/TextField";
 import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import Button from "@mui/material/Button";
-import "../styles/stylesheet.css"
+import "../styles/stylesheet.css";
 import ApiService from "../Service/ApiService";
 import AuthService from "../Service/AuthService";
 import { useDispatch } from "react-redux";
@@ -20,10 +20,10 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 export default function Login(props) {
   const [username, setUsername] = useState("jai");
   const [password, setPassword] = useState("jai");
-  const [message, setMessage] = useState("");
+  // const [message, setMessage] = useState("");
   const dispatch = useDispatch();
   const [open, setOpen] = React.useState(false);
-  const [errMsg, setErr] = React.useState('Error occured');
+  const [errMsg, setErr] = React.useState("Error occured");
 
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
@@ -34,15 +34,14 @@ export default function Login(props) {
   };
 
   const submitHandler = () => {
-    ApiService
-      .post("/auth/login", {
-        username: username,
-        password: password,
-      })
+    ApiService.post("/auth/login", {
+      username: username,
+      password: password,
+    })
       .then((res) => {
         console.log("result", res);
         AuthService.get().login(res.data.token, res.data.user);
-        setMessage('Logged in successfully!');
+        // setMessage('Logged in successfully!');
         dispatch(closeForm());
         dispatch(login());
       })
@@ -69,7 +68,7 @@ export default function Login(props) {
         </Stack>
       </div>
       <DialogContent>
-        <h6 className="message">{message}</h6>
+        {/* <h6 className="message">{message}</h6> */}
         <TextField
           //   autoFocus
           margin="dense"

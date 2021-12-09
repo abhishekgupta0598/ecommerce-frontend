@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
+// import axios from "axios";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import DialogActions from "@mui/material/DialogActions";
@@ -11,7 +11,7 @@ import Stack from "@mui/material/Stack";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 import ApiService from "../Service/ApiService";
-import AuthService from "../Service/AuthService";
+// import AuthService from "../Service/AuthService";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -22,10 +22,10 @@ export default function SignUp(props) {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [mobile_no, setMobileNumber] = useState("");
-  const [message, setMessage] = useState("");
-  const dispatch = useDispatch()
-  const [open, setOpen] = React.useState(false);;
-  const [errMsg, setErr] = React.useState('Error Occurred!');
+  // const [message, setMessage] = useState("");
+  const dispatch = useDispatch();
+  const [open, setOpen] = React.useState(false);
+  const [errMsg, setErr] = React.useState("Error Occurred!");
 
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
@@ -35,17 +35,16 @@ export default function SignUp(props) {
   };
 
   const submitHandler = () => {
-    ApiService
-      .post("/auth/register", {
-        username: username,
-        mobile_no: mobile_no,
-        email: email,
-        password: password,
-      })
+    ApiService.post("/auth/register", {
+      username: username,
+      mobile_no: mobile_no,
+      email: email,
+      password: password,
+    })
       .then((res) => {
         console.log(res);
         // dispatch(closeForm());
-        setMessage("The user is created successfully!");
+        // setMessage("The user is created successfully!");
       })
       .catch((err) => {
         console.log("error", err);

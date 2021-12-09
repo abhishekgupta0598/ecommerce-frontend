@@ -9,7 +9,7 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { openForm, login } from "../redux/loginForm/action";
+import { openForm } from "../redux/loginForm/action";
 import Badge from "@mui/material/Badge";
 import { styled } from "@mui/material/styles";
 import AuthService from "../Service/AuthService";
@@ -54,13 +54,6 @@ export default function NavBar() {
               </Button>
             </Link>
           </div>
-          {/* <div className="navMargin">
-            <Link to="/aboutus" className="navButton">
-              <Button color="inherit">
-                <b>about us</b>
-              </Button>
-            </Link>
-          </div> */}
           <Link to="/items">
             <Button aria-label="cart">
               <StyledBadge badgeContent={cart} color="secondary">

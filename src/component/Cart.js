@@ -2,15 +2,15 @@ import "../styles/stylesheet.css";
 import { Button } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
-import axios from "axios";
 import React, { useState, useEffect } from "react";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import CheckOut from "./CheckOut";
-import { useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { removeItem } from "../redux/cart/action";
 import AuthService from "../Service/AuthService";
 import Stack from "@mui/material/Stack";
 import Snackbar from "@mui/material/Snackbar";
+import { addItem } from "../redux/cart/action";
 import MuiAlert from "@mui/material/Alert";
 import ApiService from "../Service/ApiService";
 
@@ -22,16 +22,18 @@ function Cart() {
   const [items, setItems] = useState([]);
   const [removedItem, setRemoveItems] = useState(0);
   const [checkout, setCheckout] = useState(false);
-  const [totalQty, setTotalQty] = useState(0);
-  const [totalAmount, setTotalAmount] = useState(0);
   const dispatch = useDispatch();
   const [open, setOpen] = React.useState(false);
+  const cart = useSelector((state) => state.cart.add);
+  let amount = 0,
+    x = 0,
+    cartItems = [],
+    quantity = 0;
 
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
       return;
     }
-
     setOpen(false);
   };
 
@@ -39,16 +41,21 @@ function Cart() {
     if (!AuthService.get().isAuthenticated()) {
       console.log("no items yet!");
       return;
-    } 
-    ApiService
-      .get('/carts')
+    }
+    ApiService.get("/carts")
       .then((res) => {
-        console.log("res", res);
+        // console.log("res", res);
         setItems(
           res.data.cart.items.map((item, index) => {
-            return {...item, index: index };
+            return { ...item, index: index };
           })
         );
+        cartItems = res.data.cart.items.map((res) => (x = x + res.quantity));
+        if (cartItems[0] && cart !== cartItems.at(-1)) {
+          dispatch(addItem(cartItems.at(-1)));
+        } else {
+          console.log("items", cartItems.at(-1));
+        }
         console.log("items", items);
       })
       .catch((err) => {
@@ -59,16 +66,13 @@ function Cart() {
   const removeItems = (index) => {
     console.log("index", index);
     const productCode = items[index].productCode;
-    ApiService
-      .post(
-        `/carts/items/remove`, {
-          productCode: productCode,
-          quantity: items[index].quantity,
-        }
-      )
+    ApiService.post(`/carts/items/remove`, {
+      productCode: productCode,
+      quantity: items[index].quantity,
+    })
       .then((res) => {
         console.log("res", res);
-        dispatch(removeItem());
+        dispatch(removeItem(items[index].quantity));
         setRemoveItems(removedItem + 1);
         setOpen(true);
       })
@@ -82,13 +86,18 @@ function Cart() {
       y = 0;
     let total = [],
       qty = [];
-    total = items.map((item, index) => (x = x + item.price * item.qty));
-    qty = items.map((item, index) => (y = y + item.qty));
-    console.log("total", total.at(-1));
-    console.log("total", qty.at(-1));
-    setCheckout(1);
-    setTotalQty(qty.at(-1));
-    setTotalAmount(total.at(-1));
+    total = items.map((item, index) => (x = x + item.price * item.quantity));
+    qty = items.map((item, index) => (y = y + item.quantity));
+    if (total[0]) {
+      console.log("total", total.at(-1));
+      console.log("total", qty.at(-1));
+      setCheckout(1);
+      amount = total.at(-1);
+      quantity = qty.at(-1);
+    } else {
+      amount = 0;
+      total = 0;
+    }
   };
   const closeHandler = () => {
     setCheckout(0);
@@ -135,6 +144,15 @@ function Cart() {
                 >
                   <DeleteIcon />
                 </IconButton>
+                {checkout ? (
+                  <CheckOut
+                    close={closeHandler}
+                    qty={quantity}
+                    amount={amount}
+                    checkout={checkout}
+                    productCode={`${item.productCode}`}
+                  />
+                ) : null}
               </div>
               <p style={{ marginTop: "-5px", clear: "left" }}>
                 Product Name: {item.title}
@@ -154,14 +172,6 @@ function Cart() {
           Proceed to checkout
         </Button>
       </div>
-      {checkout ? (
-        <CheckOut
-          close={closeHandler}
-          qty={totalQty}
-          amount={totalAmount}
-          checkout={checkout}
-        />
-      ) : null}
     </div>
   );
 }

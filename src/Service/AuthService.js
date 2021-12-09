@@ -58,7 +58,7 @@ export default class AuthService {
     if (!this.isAuthenticated()) {
       throw Error("not authenticated");
       // return null;
-      console.log("error user");
+      // console.log("error user");
     }
     return this.user;
   }
