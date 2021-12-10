@@ -11,13 +11,24 @@ import Stack from "@mui/material/Stack";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 import ApiService from "../Service/ApiService";
-// import AuthService from "../Service/AuthService";
+import { makeStyles } from "@material-ui/core/styles";
+const useStyles = makeStyles({
+  underline: {
+    "&&&:before": {
+      borderBottom: "none",
+    },
+    "&&:after": {
+      borderBottom: "none",
+    },
+  },
+});
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
 export default function SignUp(props) {
+  const classes = useStyles();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
@@ -84,6 +95,7 @@ export default function SignUp(props) {
           variant="standard"
           onChange={(e) => setUsername(e.target.value)}
           value={username}
+          InputProps={{ classes }}
         />
         <TextField
           margin="dense"
@@ -94,6 +106,7 @@ export default function SignUp(props) {
           variant="standard"
           onChange={(e) => setEmail(e.target.value)}
           value={email}
+          InputProps={{ classes }}
         />
         <TextField
           margin="dense"
@@ -104,6 +117,7 @@ export default function SignUp(props) {
           variant="standard"
           onChange={(e) => setMobileNumber(e.target.value)}
           value={mobile_no}
+          InputProps={{ classes }}
         />
         <TextField
           margin="dense"
@@ -114,6 +128,7 @@ export default function SignUp(props) {
           variant="standard"
           onChange={(e) => setPassword(e.target.value)}
           value={password}
+          InputProps={{ classes }}
         />
       </DialogContent>
       <DialogActions>

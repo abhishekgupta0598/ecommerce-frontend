@@ -12,14 +12,26 @@ import { closeForm, login } from "../redux/loginForm/action";
 import Stack from "@mui/material/Stack";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
+import { makeStyles } from "@material-ui/core/styles";
+const useStyles = makeStyles({
+  underline: {
+    "&&&:before": {
+      borderBottom: "none",
+    },
+    "&&:after": {
+      borderBottom: "none",
+    },
+  },
+});
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
 export default function Login(props) {
-  const [username, setUsername] = useState("jai");
-  const [password, setPassword] = useState("jai");
+  const classes = useStyles();
+  const [username, setUsername] = useState("aman");
+  const [password, setPassword] = useState("aman");
   // const [message, setMessage] = useState("");
   const dispatch = useDispatch();
   const [open, setOpen] = React.useState(false);
@@ -79,6 +91,7 @@ export default function Login(props) {
           variant="standard"
           onChange={(e) => setUsername(e.target.value)}
           value={username}
+          InputProps={{ classes }}
         />
         <TextField
           margin="dense"
@@ -89,6 +102,7 @@ export default function Login(props) {
           variant="standard"
           onChange={(e) => setPassword(e.target.value)}
           value={password}
+          InputProps={{ classes }}
         />
       </DialogContent>
       <DialogActions>
