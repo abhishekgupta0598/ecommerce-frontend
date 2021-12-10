@@ -32,7 +32,6 @@ export default function Login(props) {
   const classes = useStyles();
   const [username, setUsername] = useState("aman");
   const [password, setPassword] = useState("aman");
-  // const [message, setMessage] = useState("");
   const dispatch = useDispatch();
   const [open, setOpen] = React.useState(false);
   const [errMsg, setErr] = React.useState("Error occured");
@@ -53,7 +52,6 @@ export default function Login(props) {
       .then((res) => {
         console.log("result", res);
         AuthService.get().login(res.data.token, res.data.user);
-        // setMessage('Logged in successfully!');
         dispatch(closeForm());
         dispatch(login());
       })
