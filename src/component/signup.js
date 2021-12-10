@@ -55,7 +55,8 @@ export default function SignUp(props) {
       .then((res) => {
         console.log(res);
         // dispatch(closeForm());
-        // setMessage("The user is created successfully!");
+        setErr("The user is created successfully!");
+        setOpen(true);
       })
       .catch((err) => {
         console.log("error", err);
