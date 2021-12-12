@@ -3,7 +3,8 @@ import axios from "axios";
 
 export default class ApiService {
 
-  static _ADDRESS = 'https://dishyhut.appspot.com';
+  // static _ADDRESS = 'https://dishyhut.appspot.com';
+  static _ADDRESS = 'http://localhost:9090';
 
   static post(path, body, headers) {
     const authService = AuthService.get();

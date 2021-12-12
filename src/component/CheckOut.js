@@ -22,50 +22,53 @@ function CheckOut(props) {
     props.close();
   };
 
-  useEffect(() => {
-    if (AuthService.get().getUser() === null) {
-      console.log("no items yet!");
-    } else {
-      ApiService.get(`/carts`)
-        .then((res) => {
-          console.log("res", res.data.cart);
-          setItems(
-            res.data.cart.items.map((item, index) => {
-              return { ...item, index: index };
-            })
-          );
-          console.log("items", items);
-          console.log("props", props);
-        })
-        .catch((err) => {
-          console.log("error", err);
-        });
-    }
-  }, [props.checkout]);
-
-  const paymentHandler = () => {
-    ApiService.get("/carts/items/removeAll")
+  const loadCart = () => {
+    return ApiService.get(`/carts`)
       .then((res) => {
-        console.log("response", res);
-        window.location.reload();
+        console.log("res", res.data.cart);
+        setItems(
+          res.data.cart.items.map((item, index) => {
+            return { ...item, index: index };
+          })
+        );
+        console.log("items", items);
+        console.log("props", props);
       })
       .catch((err) => {
         console.log("error", err);
       });
   };
 
-  const makePayment = (token) => {
-    ApiService.post("/checkout/payment", {
-      totalPrice: totalPrice,
-      totalQuantity: totalQuantity,
-      token: token,
-    })
+  useEffect(() => {
+    if (AuthService.get().getUser() === null) {
+      console.log("no items yet!");
+    } else {
+      loadCart();
+    }
+  }, [props.checkout]);
+
+  const makeStripePayment = (token) => {
+    return makePayment({
+      paymentMethod: "STRIPE",
+      paymentToken: token,
+    });
+  };
+  const makeOfflinePayment = () => {
+    return makePayment({
+      paymentMethod: "OFFLINE",
+    });
+  }
+
+  const makePayment = (body) => {
+    ApiService.post("/carts/checkout", body)
       .then((res) => {
         console.log("response", res);
-        paymentHandler();
+        loadCart();
+        handleClose();
       })
       .catch((err) => {
         console.log("error", err);
+        loadCart();
       });
   };
 
@@ -134,11 +137,21 @@ function CheckOut(props) {
                 locale="us"
                 description="Please make your payment"
                 stripeKey="pk_test_51JfQDaSBKItp4gm7CA23ztTLHOl18mHJZwUJ0ysf8QDj8QeAKtpxZyH36n29mrkUltH4FJxfA3MMjb0vrq5FMmSh00X1qHOgO6"
-                token={makePayment}
+                token={makeStripePayment}
                 amount={totalPrice * 100 /*cents*/}
               >
-                PAYMENT
+                Pay Now
               </StripeCheckout>
+            </Button>
+            <Button
+              disabled={!totalQuantity || !totalPrice}
+              // onClick={paymentHandler}
+              variant="contained"
+              color="inherit"
+              onClick={() => makeOfflinePayment()}
+            >
+              <AccountBalanceIcon />
+              Pay Later
             </Button>
           </DialogActions>
         </Dialog>
