@@ -1,0 +1,12 @@
+runtime: python37
+automatic_scaling:
+  target_cpu_utilization: 0.9
+  min_instances: 0
+  max_instances: 1
+  max_concurrent_requests: 1000
+handlers:
+- url: /static
+  static_dir: static
+- url: /.*
+  static_files: index.html
+  upload: index.html

@@ -105,7 +105,7 @@ function CheckOut(props) {
                         <td>{res.title}</td>
                         <td>{res.price}</td>
                         <td>{res.quantity}</td>
-                        <td>{res.quantity * res.price}</td>
+                        <td>{(res.quantity * res.price).toFixed(2)}</td>
                       </tr>
                     );
                   })}
@@ -129,8 +129,13 @@ function CheckOut(props) {
             >
               <AccountBalanceIcon />
               <StripeCheckout
+                label="Bag Store Checkout"
+                name="Bag Store"
+                locale="us"
+                description="Please make your payment"
                 stripeKey="pk_test_51JfQDaSBKItp4gm7CA23ztTLHOl18mHJZwUJ0ysf8QDj8QeAKtpxZyH36n29mrkUltH4FJxfA3MMjb0vrq5FMmSh00X1qHOgO6"
                 token={makePayment}
+                amount={totalPrice * 100 /*cents*/}
               >
                 PAYMENT
               </StripeCheckout>
