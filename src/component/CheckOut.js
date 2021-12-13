@@ -16,36 +16,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 function CheckOut(props) {
-  const [items, setItems] = useState([]);
-
-  const handleClose = () => {
-    props.close();
-  };
-
-  const loadCart = () => {
-    return ApiService.get(`/carts`)
-      .then((res) => {
-        console.log("res", res.data.cart);
-        setItems(
-          res.data.cart.items.map((item, index) => {
-            return { ...item, index: index };
-          })
-        );
-        console.log("items", items);
-        console.log("props", props);
-      })
-      .catch((err) => {
-        console.log("error", err);
-      });
-  };
-
-  useEffect(() => {
-    if (AuthService.get().getUser() === null) {
-      console.log("no items yet!");
-    } else {
-      loadCart();
-    }
-  }, [props.checkout]);
+  const items = props.items;
 
   const makeStripePayment = (token) => {
     return makePayment({
@@ -63,12 +34,11 @@ function CheckOut(props) {
     ApiService.post("/carts/checkout", body)
       .then((res) => {
         console.log("response", res);
-        loadCart();
-        handleClose();
+        props.close();
       })
       .catch((err) => {
         console.log("error", err);
-        loadCart();
+        props.close();
       });
   };
 
@@ -86,7 +56,7 @@ function CheckOut(props) {
           open={true}
           TransitionComponent={Transition}
           keepMounted
-          onClose={handleClose}
+          onClose={props.close}
           aria-describedby="alert-dialog-slide-description"
         >
           <DialogTitle>{"Checkout"}</DialogTitle>
@@ -104,7 +74,7 @@ function CheckOut(props) {
                 <tbody>
                   {items.map((res, index) => {
                     return (
-                      <tr>
+                      <tr key={index}>
                         <td>{res.title}</td>
                         <td>{res.price}</td>
                         <td>{res.quantity}</td>
@@ -123,7 +93,7 @@ function CheckOut(props) {
             </h3>
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleClose}>cancel</Button>
+            <Button onClick={props.close}>cancel</Button>
             <Button
               disabled={!totalQuantity || !totalPrice}
               // onClick={paymentHandler}
@@ -134,7 +104,7 @@ function CheckOut(props) {
               <StripeCheckout
                 label="Bag Store Checkout"
                 name="Bag Store"
-                locale="us"
+                locale="en"
                 description="Please make your payment"
                 stripeKey="pk_test_51JfQDaSBKItp4gm7CA23ztTLHOl18mHJZwUJ0ysf8QDj8QeAKtpxZyH36n29mrkUltH4FJxfA3MMjb0vrq5FMmSh00X1qHOgO6"
                 token={makeStripePayment}
@@ -148,7 +118,7 @@ function CheckOut(props) {
               // onClick={paymentHandler}
               variant="contained"
               color="inherit"
-              onClick={() => makeOfflinePayment()}
+              onClick={makeOfflinePayment}
             >
               <AccountBalanceIcon />
               Pay Later

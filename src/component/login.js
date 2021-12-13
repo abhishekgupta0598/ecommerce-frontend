@@ -40,7 +40,6 @@ export default function Login(props) {
     if (reason === "clickaway") {
       return;
     }
-
     setOpen(false);
   };
 

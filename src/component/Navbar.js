@@ -13,6 +13,7 @@ import { openForm } from "../redux/loginForm/action";
 import Badge from "@mui/material/Badge";
 import { styled } from "@mui/material/styles";
 import AuthService from "../Service/AuthService";
+import settings from "../settings";
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
   "& .MuiBadge-badge": {
@@ -33,12 +34,13 @@ export default function NavBar() {
   const accountHandler = () => {
     dispatch(openForm());
   };
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static" color="primary">
         <Toolbar>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            BAGSTORE
+            {settings.name}
           </Typography>
           <div>
             <Link to="/" className="navButton">
@@ -50,7 +52,14 @@ export default function NavBar() {
           <div>
             <Link to="/product" className="navButton">
               <Button className="navMargin" color="inherit">
-                <b>product</b>
+                <b>Products</b>
+              </Button>
+            </Link>
+          </div>
+          <div>
+            <Link to="/product" className="navButton">
+              <Button className="navMargin" color="inherit">
+                <b>Orders</b>
               </Button>
             </Link>
           </div>

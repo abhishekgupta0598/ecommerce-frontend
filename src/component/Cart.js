@@ -20,61 +20,54 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 
 function Cart() {
   const [items, setItems] = useState([]);
-  const [removedItem, setRemoveItems] = useState(0);
-  const [checkout, setCheckout] = useState(false);
+  const [checkoutOpen, setCheckoutOpen] = useState(false);
   const dispatch = useDispatch();
-  const [open, setOpen] = React.useState(false);
+  const [deleteAlertOpen, setDeleteAlertOpen] = React.useState(false);
   const cart = useSelector((state) => state.cart.add);
-  let amount = 0,
-    x = 0,
-    cartItems = [],
-    quantity = 0;
+  let amount = 0, quantity = 0;
+  for (const item of items) {
+    amount += item.price * item.quantity;
+    quantity += item.quantity;
+  }
 
-  const handleClose = (event, reason) => {
+  const handleDeleteAlertClose = (event, reason) => {
     if (reason === "clickaway") {
       return;
     }
-    setOpen(false);
+    setDeleteAlertOpen(false);
   };
 
-  useEffect(() => {
-    if (!AuthService.get().isAuthenticated()) {
-      console.log("no items yet!");
-      return;
-    }
-    ApiService.get("/carts")
+  const loadCart = () => {
+    return ApiService.get("/carts")
       .then((res) => {
-        // console.log("res", res);
         setItems(
           res.data.cart.items.map((item, index) => {
             return { ...item, index: index };
           })
         );
-        cartItems = res.data.cart.items.map((res) => (x = x + res.quantity));
-        if (cartItems[0] && cart !== cartItems.at(-1)) {
-          dispatch(addItem(cartItems.at(-1)));
-        } else {
-          console.log("items", cartItems.at(-1));
-        }
         console.log("items", items);
       })
       .catch((err) => {
         console.log("error", err);
       });
-  }, [removedItem]);
+  }
+
+  useEffect(() => loadCart(), []);
 
   const removeItems = (index) => {
     console.log("index", index);
-    const productCode = items[index].productCode;
-    ApiService.post(`/carts/items/remove`, {
-      productCode: productCode,
-      quantity: items[index].quantity,
-    })
+    const item = items[index];
+    const productCode = item.productCode;
+    ApiService
+      .post(`/carts/items/remove`, {
+        productCode: productCode,
+        quantity: item.quantity,
+      })
       .then((res) => {
         console.log("res", res);
-        dispatch(removeItem(items[index].quantity));
-        setRemoveItems(removedItem + 1);
-        setOpen(true);
+        // dispatch(removeItem(item.quantity));
+        loadCart();
+        setDeleteAlertOpen(true);
       })
       .catch((err) => {
         console.log("error", err);
@@ -82,32 +75,20 @@ function Cart() {
   };
 
   const openHandler = () => {
-    let x = 0,
-      y = 0;
-    let total = [],
-      qty = [];
-    total = items.map((item, index) => (x = x + item.price * item.quantity));
-    qty = items.map((item, index) => (y = y + item.quantity));
-    if (total[0]) {
-      console.log("total", total.at(-1));
-      console.log("total", qty.at(-1));
-      setCheckout(1);
-      amount = total.at(-1);
-      quantity = qty.at(-1);
-    } else {
-      amount = 0;
-      total = 0;
+    if (quantity > 0) {
+      setCheckoutOpen(true);
     }
   };
-  const closeHandler = () => {
-    setCheckout(0);
+  const closeCheckoutDialogHandler = () => {
+    setCheckoutOpen(false);
+    loadCart();
   };
   return (
     <div style={{ paddingLeft: "15%" }}>
       <Stack spacing={2} sx={{ width: "100%" }}>
-        <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+        <Snackbar open={deleteAlertOpen} autoHideDuration={6000} onClose={handleDeleteAlertClose}>
           <Alert
-            onClose={handleClose}
+            onClose={handleDeleteAlertClose}
             severity="success"
             sx={{ width: "100%" }}
           >
@@ -118,7 +99,7 @@ function Cart() {
       <h3>All Purchase Items</h3>
       {items.map((item, index) => {
         return (
-          <div className="cartItems1">
+          <div className="cartItems1" key={index}>
             <span className="cartItems2">
               <img
                 src={`${item.imagePath}`}
@@ -144,13 +125,14 @@ function Cart() {
                 >
                   <DeleteIcon />
                 </IconButton>
-                {checkout ? (
+                {checkoutOpen ? (
                   <CheckOut
-                    close={closeHandler}
+                    close={closeCheckoutDialogHandler}
                     qty={quantity}
                     amount={amount}
-                    checkout={checkout}
+                    checkout={checkoutOpen}
                     productCode={`${item.productCode}`}
+                    items={items}
                   />
                 ) : null}
               </div>

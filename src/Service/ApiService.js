@@ -1,10 +1,10 @@
 import AuthService from "./AuthService";
 import axios from "axios";
+import settings from "../settings"
 
 export default class ApiService {
 
-  // static _ADDRESS = 'https://dishyhut.appspot.com';
-  static _ADDRESS = 'http://localhost:9090';
+  static _ADDRESS = settings.backend;
 
   static post(path, body, headers) {
     const authService = AuthService.get();
@@ -15,7 +15,7 @@ export default class ApiService {
         Authorization: `Bearer ${authService.getAuthToken()}`
       }
     }
-    return axios.post(`${ApiService._ADDRESS}${path}`, body, { headers });
+    return axios.post(`${settings.backend}${path}`, body, { headers });
   }
 
   static get(path, headers) {
@@ -27,6 +27,6 @@ export default class ApiService {
         Authorization: `Bearer ${authService.getAuthToken()}`
       }
     }
-    return axios.get(`${ApiService._ADDRESS}${path}`, { headers });
+    return axios.get(`${settings.backend}${path}`, { headers });
   }
 }
