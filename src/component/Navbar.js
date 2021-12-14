@@ -82,6 +82,9 @@ export default function NavBar() {
         <ListItem button key={'PRODUCT'} onClick={() => history.push('/product')}>
           <ListItemText primary={'PRODUCT'} />
         </ListItem>
+        <ListItem button key={'ORDER'} onClick={() => history.push('/product')}>
+          <ListItemText primary={'ORDER'} />
+        </ListItem>
         <ListItem button key={'CART'}>
           <ListItemText primary={'CART'} onClick={() => history.push('/items')} />
         </ListItem>
@@ -148,6 +151,9 @@ export default function NavBar() {
     </Box></div> : <div>
       <AppBar position="fixed" color="primary">
         <Toolbar>
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            {settings.name}
+          </Typography>
           <div>
             {['top'].map((anchor) => (
               <React.Fragment key={anchor}>
@@ -158,9 +164,6 @@ export default function NavBar() {
               </React.Fragment>
             ))}
           </div>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            {settings.name}
-          </Typography>
         </Toolbar>
       </AppBar></div>}
   </div>

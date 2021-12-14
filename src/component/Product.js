@@ -99,25 +99,10 @@ function Product() {
 
   return (
     <div className="root">
-      <h3 style={{ marginLeft: "4px" }}>All Products</h3>
+      <h3>All Products</h3>
       {product.map((product, index) => {
         return (
           <span className="span1">
-            <Stack spacing={2} sx={{ width: "100%" }}>
-              <Snackbar
-                open={openSnackBar}
-                autoHideDuration={4000}
-                onClose={handleClose}
-              >
-                <Alert
-                  onClose={handleClose}
-                  severity="success"
-                  sx={{ width: "100%" }}
-                >
-                  {message}
-                </Alert>
-              </Snackbar>
-            </Stack>
             <span className="span2">
               <img
                 src={`${product.imagePath}`}
@@ -126,8 +111,8 @@ function Product() {
                 className="productImage"
               />
             </span>
-            <div style={{ float: "left" }}>
-              <span className="span3" style={{ float: "left", width: "150px" }}>
+            <div style={{ display: "flex" }}>
+              <span className="span3">
                 <Button
                   onClick={() => addHandler(index)}
                   color="inherit"
@@ -137,9 +122,9 @@ function Product() {
                   ADD ITEM
                 </Button>
               </span>
-              <span style={{ float: "left", width: "130px" }}>
-                <span style={{ float: "left", marginTop: "8px" }}>Qty:</span>
-                <span style={{ float: "left" }}>
+              <span className="wrapSpan">
+                <span style={{ marginTop: "8px" }}>Qty:</span>
+                <span>
                   <IconButton
                     onClick={() => decrementHandler(index)}
                     color="inherit"
@@ -149,10 +134,10 @@ function Product() {
                     <KeyboardArrowLeftIcon />
                   </IconButton>
                 </span>
-                <span style={{ float: "left", marginTop: "9px" }}>
+                <span style={{ marginTop: "9px" }}>
                   {product.count}
                 </span>
-                <span style={{ float: "left" }}>
+                <span >
                   <IconButton
                     onClick={() => incrementHandler(index)}
                     color="inherit"
@@ -167,6 +152,21 @@ function Product() {
           </span>
         );
       })}
+      <Stack spacing={2} sx={{ width: "100%" }}>
+        <Snackbar
+          open={openSnackBar}
+          autoHideDuration={4000}
+          onClose={handleClose}
+        >
+          <Alert
+            onClose={handleClose}
+            severity="success"
+            sx={{ width: "100%" }}
+          >
+            {message}
+          </Alert>
+        </Snackbar>
+      </Stack>
     </div>
   );
 }
