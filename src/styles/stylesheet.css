@@ -59,29 +59,55 @@
   float: left;
 }
 
-.bg {
-  height: 594px;
-  width: 1355px;
-  margin: 0px;
-  /* The image used */
-  background-image: url("../bag01.jpeg");
+@media screen and (min-width: 1em) and (max-width:130em) {
+  .bg {
+    height: 100%;
+    width: 100%;
+    margin: 0px;
+    /* The image used */
+    background-image: url("../bag01.jpeg");
 
-  /* Center and scale the image nicely */
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
+    /* Center and scale the image nicely */
+    background-position: center;
+    background-repeat: no-repeat;
+    position: fixed;
+    background-size: cover;
+  }
 }
 
-.content {
-  position: absolute;
-  bottom: 0;
-  background: rgb(0, 0, 0); /* Fallback color */
-  background: rgba(0, 0, 0, 0.5); /* Black background with 0.5 opacity */
-  color: #f1f1f1;
-  width: 100%;
-  padding: 20px;
+@media (max-width: 30em){
+  .content {
+    display: none;
+  }
 }
 
-.font {
-  font-size: 100px;
+
+@media (min-width: 41em){
+  .content {
+    position: absolute;
+    bottom: 0;
+    background: rgb(0, 0, 0); /* Fallback color */
+    background: rgba(0, 0, 0, 0.5); /* Black background with 0.5 opacity */
+    color: #f1f1f1;
+    width: 100%;
+    padding: 20px;
+  }
+}
+
+@media (max-width: 40em){
+  .font {
+    font-size: 60px;
+  }  
+}
+
+@media (min-width: 41em){
+  .font {
+    font-size: 100px;
+  }  
+}
+
+@media (max-width: 20em){
+  .font {
+    font-size: 40px;
+  }  
 }
