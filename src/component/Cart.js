@@ -84,23 +84,12 @@ function Cart() {
     loadCart();
   };
   return (
-    <div style={{ paddingLeft: "15%" }}>
-      <Stack spacing={2} sx={{ width: "100%" }}>
-        <Snackbar open={deleteAlertOpen} autoHideDuration={6000} onClose={handleDeleteAlertClose}>
-          <Alert
-            onClose={handleDeleteAlertClose}
-            severity="success"
-            sx={{ width: "100%" }}
-          >
-            The Item is deleted successfully
-          </Alert>
-        </Snackbar>
-      </Stack>
-      <h3>All Purchase Items</h3>
+    <div className="root" >
+      <h3 >All Items</h3>
       {items.map((item, index) => {
         return (
-          <div className="cartItems1" key={index}>
-            <span className="cartItems2">
+          <div className="cartIRootDiv" key={index}>
+            <span className="cartImage">
               <img
                 src={`${item.imagePath}`}
                 alt="items images"
@@ -108,23 +97,24 @@ function Cart() {
                 className="productImage"
               />
             </span>
-            <span className="cartItems3">
-              <p style={{ float: "left", marginTop: "3px" }}>Remove Item:</p>
-              <div
-                style={{
-                  float: "left",
-                  marginTop: "-5px",
-                }}
-              >
-                <IconButton
-                  onClick={() => removeItems(index)}
-                  color="inherit"
-                  variant="contained"
-                  key={`${item.productCode}`}
-                  style={{ marginLeft: "10px", float: "left" }}
+            <span className="cartSpan">
+              <div style={{display: "flex"}}>
+                <p style={{ marginTop: "3px" }}><b>Remove Item:</b></p>
+                <div
+                  style={{
+                    marginTop: "-5px",
+                  }}
                 >
-                  <DeleteIcon />
-                </IconButton>
+                  <IconButton
+                    onClick={() => removeItems(index)}
+                    color="inherit"
+                    variant="contained"
+                    key={`${item.productCode}`}
+                    style={{ marginLeft: "10px", float: "left" }}
+                  >
+                    <DeleteIcon />
+                  </IconButton>
+                </div>
                 {checkoutOpen ? (
                   <CheckOut
                     close={closeCheckoutDialogHandler}
@@ -136,24 +126,35 @@ function Cart() {
                   />
                 ) : null}
               </div>
-              <p style={{ marginTop: "-5px", clear: "left" }}>
-                Product Name: {item.title}
+              <p className="cartMargin">
+                <b>Product Name: {item.title}</b>
               </p>
-              <p style={{ marginTop: "-5px" }}>Price: {item.price}</p>
-              <p style={{ marginTop: "-5px" }}>Manufacturer: India</p>
-              <p style={{ float: "left", marginTop: "-5px" }}>
-                Quantity:{item.quantity}
+              <p className="cartMargin"><b>Price: {item.price}</b></p>
+              <p className="cartMargin"><b>Manufacturer: India</b></p>
+              <p className="cartMargin">
+                <b>Quantity:{item.quantity}</b>
               </p>
             </span>
           </div>
         );
       })}
-      <div style={{ clear: "left", marginLeft: "70%", marginBottom: "5%" }}>
+      <div className="checkout">
         <Button color="inherit" variant="contained" onClick={openHandler}>
           <ShoppingCartIcon />
           Proceed to checkout
         </Button>
       </div>
+      <Stack spacing={2} sx={{ width: "100%" }}>
+        <Snackbar open={deleteAlertOpen} autoHideDuration={6000} onClose={handleDeleteAlertClose}>
+          <Alert
+            onClose={handleDeleteAlertClose}
+            severity="success"
+            sx={{ width: "100%" }}
+          >
+            The Item is deleted successfully
+          </Alert>
+        </Snackbar>
+      </Stack>
     </div>
   );
 }

@@ -50,7 +50,7 @@ function CheckOut(props) {
   }
 
   return (
-    <div>
+    <div style={{padding: "3%"}}>
       <div>
         <Dialog
           open={true}
