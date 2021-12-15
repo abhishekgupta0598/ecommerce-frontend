@@ -9,6 +9,7 @@ import { useSelector } from "react-redux";
 import Product from "./component/Product";
 import Cart from "./component/Cart";
 import AuthService from "./Service/AuthService";
+import Orders from "./component/Orders";
 
 function App() {
   const login = useSelector((state) => state.form.login);
@@ -26,6 +27,7 @@ function App() {
           <Route path="/" exact component={Home} />
           <Route path="/product" component={Product} />
           <Route path="/items" component={Cart} />
+          <Route path="/orders" component={Orders} />
         </Switch>
       </Router>
       {AuthService.get().token() ? <Logout /> : <FormDialog />}

@@ -124,9 +124,9 @@ export default function NavBar() {
             </Link>
           </div>
           <div>
-            <Link to="/product" className="navButton">
+            <Link to="/orders" className="navButton">
               <Button className="navMargin" color="inherit">
-                <b>order</b>
+                <b>orders</b>
               </Button>
             </Link>
           </div>

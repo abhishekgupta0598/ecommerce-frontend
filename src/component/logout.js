@@ -30,9 +30,7 @@ function Logout() {
           <span style={{ width: "100%", display: "block" }}>
             <Button>
               {AuthService.get().getAuthToken()
-                ? `${
-                    AuthService.get().getUser().username
-                  } is LogIn Successfully!`
+                ? `Hello ${AuthService.get().getUser().username}!`
                 : null}
             </Button>
           </span>
