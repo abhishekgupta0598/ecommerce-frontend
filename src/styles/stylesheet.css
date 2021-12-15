@@ -195,3 +195,24 @@
     margin-top: 5%
   }  
 }
+@media (max-width: 44.9em){
+  .order {
+    display: block;
+  }
+}
+  
+@media (min-width: 45em){
+  .order {
+    display: flex;
+  }
+  .shiftLeft {
+    font-size: 16px;
+    /* border: 1px solid; */
+    width: 255px
+  }
+  .title {
+    font-size: 16px;
+    width: 215px;
+    /* border: 1px solid */
+  }
+}

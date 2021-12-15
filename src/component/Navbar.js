@@ -82,7 +82,7 @@ export default function NavBar() {
         <ListItem button key={'PRODUCT'} onClick={() => history.push('/product')}>
           <ListItemText primary={'PRODUCT'} />
         </ListItem>
-        <ListItem button key={'ORDER'} onClick={() => history.push('/product')}>
+        <ListItem button key={'ORDER'} onClick={() => history.push('/orders')}>
           <ListItemText primary={'ORDER'} />
         </ListItem>
         <ListItem button key={'CART'}>

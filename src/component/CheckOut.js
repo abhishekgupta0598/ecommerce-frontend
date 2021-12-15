@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -7,7 +7,7 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Slide from "@mui/material/Slide";
 import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
-import AuthService from "../Service/AuthService";
+// import AuthService from "../Service/AuthService";
 import ApiService from "../Service/ApiService";
 import StripeCheckout from "react-stripe-checkout";
 
