@@ -32,8 +32,8 @@
 @media (max-width: 44.9em){
   .span1{
     display: inline-block;
-    width: 220px;
-    height: 150px;
+    width: 230px;
+    height: 160px;
     /* border: 1px solid; */
     margin: 6px;
   }  
@@ -90,8 +90,8 @@
 @media (max-width: 44.9em){
   .cartImage {
     display: inline-block;
-    width: 160px;
-    height: 100px;
+    width: 210px;
+    height: 120px;
     /* border: 1px solid; */
   }  
 }
