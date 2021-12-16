@@ -5,14 +5,12 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import React, { useState, useEffect } from "react";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import CheckOut from "./CheckOut";
-// import { useSelector, useDispatch } from "react-redux";
-// import { removeItem } from "../redux/cart/action";
-// import AuthService from "../Service/AuthService";
 import Stack from "@mui/material/Stack";
 import Snackbar from "@mui/material/Snackbar";
-// import { addItem } from "../redux/cart/action";
 import MuiAlert from "@mui/material/Alert";
 import ApiService from "../Service/ApiService";
+import { useDispatch } from "react-redux";
+import { removeItem } from "../redux/cart/action";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={2} ref={ref} variant="filled" {...props} />;
@@ -22,9 +20,8 @@ function Cart() {
 
   const [items, setItems] = useState([]);
   const [checkoutOpen, setCheckoutOpen] = useState(false);
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const [deleteAlertOpen, setDeleteAlertOpen] = React.useState(false);
-  // const cart = useSelector((state) => state.cart.add);
   let amount = 0, quantity = 0;
   for (const item of items) {
     amount += item.price * item.quantity;
@@ -66,7 +63,7 @@ function Cart() {
       })
       .then((res) => {
         console.log("res", res);
-        // dispatch(removeItem(item.quantity));
+        dispatch(removeItem(item.quantity));
         loadCart();
         setDeleteAlertOpen(true);
       })

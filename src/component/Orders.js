@@ -1,20 +1,12 @@
 import React, { useState, useEffect } from "react";
 import "../styles/stylesheet.css";
 import ApiService from "../Service/ApiService";
-// import MuiAlert from "@mui/material/Alert";
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
-// import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-// import { Button } from "@mui/material";
-// import { fontSize } from "@mui/system";
 import FullScreenDialog from "./orderDetails"
-
-// const Alert = React.forwardRef(function Alert(props, ref) {
-//   return <MuiAlert elevation={2} ref={ref} variant="filled" {...props} />;
-// });
 
 const useStyles = makeStyles({
   root: {
@@ -32,9 +24,6 @@ function Orders() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
 
-  // const handleClickOpen = () => {
-  //   setOpen(true);
-  // };
 
   const handleClose = () => {
     setOpen(false);
@@ -61,7 +50,7 @@ function Orders() {
   console.log('order', orders)
   return (
     <div className="root">
-      <h3 style={{ marginLeft: "4px" }}>All Products</h3>
+      <h3 style={{ marginLeft: "4px" }}>All Orders</h3>
       {orders.length > 0 && orders.map((order, index) => {
         return (
           <div>

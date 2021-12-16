@@ -10,6 +10,8 @@ import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
 // import AuthService from "../Service/AuthService";
 import ApiService from "../Service/ApiService";
 import StripeCheckout from "react-stripe-checkout";
+import { useDispatch } from "react-redux";
+import { removeItem } from "../redux/cart/action";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -17,6 +19,14 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 function CheckOut(props) {
   const items = props.items;
+  const dispatch = useDispatch()
+  let totalQuantity = 0;
+  let totalPrice = 0;
+  for (const item of items) {
+    totalQuantity += item.quantity;
+    totalPrice = totalPrice + item.quantity * item.price;
+  }
+
 
   const makeStripePayment = (token) => {
     return makePayment({
@@ -35,6 +45,7 @@ function CheckOut(props) {
       .then((res) => {
         console.log("response", res);
         props.close();
+        dispatch(removeItem(totalQuantity))
       })
       .catch((err) => {
         console.log("error", err);
@@ -42,12 +53,12 @@ function CheckOut(props) {
       });
   };
 
-  let totalQuantity = 0;
-  let totalPrice = 0;
-  for (const item of items) {
-    totalQuantity += item.quantity;
-    totalPrice = totalPrice + item.quantity * item.price;
-  }
+  // let totalQuantity = 0;
+  // let totalPrice = 0;
+  // for (const item of items) {
+  //   totalQuantity += item.quantity;
+  //   totalPrice = totalPrice + item.quantity * item.price;
+  // }
 
   return (
     <div style={{padding: "3%"}}>

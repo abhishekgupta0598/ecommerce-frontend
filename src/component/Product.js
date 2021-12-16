@@ -91,7 +91,7 @@ function Product() {
       })
       .catch((err) => {
         console.log("error", err);
-        setMessage("This product is already stored into the cart!");
+        setMessage("You need to login");
         setSnackBar(true);
         console.log("snackbar", openSnackBar);
       });
