@@ -51,6 +51,7 @@ function Orders() {
   return (
     <div className="root">
       <h3 style={{ marginLeft: "4px" }}>All Orders</h3>
+      {orders.length === 0  ? <h3>No Orders yet!</h3> : null}
       {orders.length > 0 && orders.map((order, index) => {
         return (
           <div>

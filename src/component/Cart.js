@@ -85,6 +85,7 @@ function Cart() {
   return (
     <div className="root" >
       <h3 >All Items</h3>
+      {items.length === 0  ? <h3>No Items yet!</h3> : null}
       {items.map((item, index) => {
         return (
           <div className="cartIRootDiv" key={index}>

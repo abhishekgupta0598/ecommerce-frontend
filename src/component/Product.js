@@ -100,7 +100,8 @@ function Product() {
   return (
     <div className="root">
       <h3>All Products</h3>
-      {product.map((product, index) => {
+      {product.length === 0  ? <h3>Loading...</h3> : null}
+      {product.length > 0 && product.map((product, index) => {
         return (
           <span className="span1">
             <span className="span2">
